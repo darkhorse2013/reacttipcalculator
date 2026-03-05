@@ -2,13 +2,11 @@ import { useState } from "react";
 import "./App.css";
 
 export default function App() {
-  const [bill, setBill] = useState("");
-  const [tipPercentage, setTipPercentage] = useState("");
-
-  const [billError, setBillError] = useState("");
-  const [tipError, setTipError] = useState("");
-
-  const [total, setTotal] = useState("");
+  const [bill, setBill] = useState(""); // what the user typed for the bill
+  const [tipPercentage, setTipPercentage] = useState(""); //what the user typed for the tip amount
+  const [billError, setBillError] = useState(""); //an error message
+  const [tipError, setTipError] = useState(""); // an error message
+  const [total, setTotal] = useState(""); // the calculated result
 
   function handleBillChange(event) {
     setBill(event.target.value);
