@@ -2,20 +2,29 @@ import { useState } from "react";
 import "./App.css";
 
 export default function App() {
-  const [bill, setBill] = useState(""); // what the user typed for the bill
-  const [tipPercentage, setTipPercentage] = useState(""); //what the user typed for the tip amount
-  const [billError, setBillError] = useState(""); //an error message
-  const [tipError, setTipError] = useState(""); // an error message
-  const [total, setTotal] = useState(""); // the calculated result
+  const [bill, setBill] = useState(""); // bill input value stored in React state
+  const [tipPercentage, setTipPercentage] = useState(""); // tip input value stored in React state
+  const [billError, setBillError] = useState(""); // error message for bill input
+  const [tipError, setTipError] = useState(""); // error message for tip input
+  const [total, setTotal] = useState(""); // total including tip, displayed in the UI
+
+  //when user types in bill in UI, detect the event
+  //take the current text in the input box via event.target.value and store it in React state (bill)
+  //we are storing value for bill in react so that we can reference that and calculate total
 
   function handleBillChange(event) {
     setBill(event.target.value);
   }
 
+  //when user types in tip in UI, detect the event
+  //take the current text in the input box via event.target.value and store it in React state (tipPercentage)
+  //we are storing value for tip in react so that we can reference that and calculate total
+
   function handleTipChange(event) {
     setTipPercentage(event.target.value);
   }
 
+  //calculate total
   function calculateTotal() {
     var billValue = parseFloat(bill);
     var tipValue = parseFloat(tipPercentage);
@@ -58,7 +67,7 @@ export default function App() {
   return (
     <div className="container-properties">
       <div id="title">
-        <h1>Tip Calculator - Please break it - Practice project</h1>
+        <h1>Tip Calculator</h1>
       </div>
 
       <div>Enter the bill amount</div>
