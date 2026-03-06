@@ -130,7 +130,6 @@ export default function App() {
 
   return (
     <div className="container-properties">
-      <title>Tip Calulator</title>
       <div id="title">
         <h1>Tip Calculator</h1>
       </div>
