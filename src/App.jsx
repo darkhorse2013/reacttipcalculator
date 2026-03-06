@@ -43,6 +43,36 @@ export default function App() {
     var billValue = parseFloat(bill);
     var tipValue = parseFloat(tipPercentage);
 
+    //ADD VALIDATION FOR NEGATIVE NUMBERS
+    if (billValue < 0 && tipValue < 0) {
+      //clear previous validation
+      setTotalTip("");
+      setTotal("");
+      setBillError("Only positive values are allowed");
+      setTipError("Only positive values are allowed");
+      return;
+    }
+
+    if (billValue < 0) {
+      //first clear total and tip state
+      setTotalTip("");
+      setTotal("");
+      //set and clear previous validation
+      setBillError("Only positive values are allowed");
+      setTipError("");
+      return;
+    }
+
+    if (tipValue < 0) {
+      setTotalTip("");
+      setTotal("");
+      //set and clear previous validation
+      setTipError("Only positive values are allowed");
+      setBillError("");
+
+      return;
+    }
+
     // Reset output first (like clearing totalValue)
     setTotal("");
 
@@ -109,7 +139,12 @@ export default function App() {
       <div>Bill amount:</div>
       <span className="incorrectValue">{billError}</span>
       <div>
-        <input id="billAmount" value={bill} onChange={handleBillChange} />
+        <input
+          id="billAmount"
+          value={bill}
+          //type="number"
+          onChange={handleBillChange}
+        />
       </div>
 
       <div>Tip Percentage:</div>
@@ -118,6 +153,7 @@ export default function App() {
         <input
           id="tipPercentage"
           value={tipPercentage}
+          //type="number"
           onChange={handleTipChange}
         />
       </div>
