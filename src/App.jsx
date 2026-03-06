@@ -7,6 +7,8 @@ export default function App() {
   const [billError, setBillError] = useState(""); // error message for bill input
   const [tipError, setTipError] = useState(""); // error message for tip input
   const [total, setTotal] = useState(""); // total including tip, displayed in the UI
+  //get value from UI and store in state
+  const [totalTip, setTotalTip] = useState("");
 
   //when user types in bill in UI, detect the event
   //take the current text in the input box via event.target.value and store it in React state (bill)
@@ -22,6 +24,18 @@ export default function App() {
 
   function handleTipChange(event) {
     setTipPercentage(event.target.value);
+  }
+
+  //event listener for reset values button
+  function resetValues() {
+    //update state of components
+    setBill("");
+    setTipPercentage("");
+    setTotalTip("");
+    setTotal("");
+    //clear errors on reset
+    setBillError("");
+    setTipError("");
   }
 
   //calculate total
@@ -58,10 +72,30 @@ export default function App() {
     setTipError("");
 
     // Calculate total
-    var tipAmount = billValue * (tipValue / 100);
-    var finalTotal = billValue + tipAmount;
+    var tipAmount = calculateTipAmount(billValue, tipValue);
+    var finalTotal = calculateFinalTotal(billValue, tipAmount);
 
+    //pass tip given back to UI
+    setTotalTip(tipAmount.toFixed(2));
+
+    //pass bill given back to UI
     setTotal(finalTotal.toFixed(2));
+  }
+
+  //created function to calculate Tip Amount so that we can potentially unit test this.
+  //seperating business logic from UI
+  function calculateTipAmount(billValue, tipValue) {
+    var calculateTipAmount = billValue * (tipValue / 100);
+
+    return calculateTipAmount;
+  }
+
+  //created function to calculate Final Total so that we can potentially unit test this.
+  //seperating business logic from UI
+  function calculateFinalTotal(billValue, tipAmount) {
+    var calculateFinalTotal = billValue + tipAmount;
+
+    return calculateFinalTotal;
   }
 
   return (
@@ -92,8 +126,13 @@ export default function App() {
         <button type="button" onClick={calculateTotal}>
           Calculate
         </button>
+        <button type="button" onClick={resetValues}>
+          Reset
+        </button>
       </div>
-
+      <div>
+        Tip amount: £<span id="totalValue">{totalTip}</span>
+      </div>
       <div>
         Total: £<span id="totalValue">{total}</span>
       </div>
