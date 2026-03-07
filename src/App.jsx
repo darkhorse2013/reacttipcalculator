@@ -10,12 +10,40 @@ export default function App() {
   //get value from UI and store in state
   const [totalTip, setTotalTip] = useState("");
 
+  //create an event handler that fires when button is pressed
   //when user types in bill in UI, detect the event
   //take the current text in the input box via event.target.value and store it in React state (bill)
   //we are storing value for bill in react so that we can reference that and calculate total
 
   function handleBillChange(event) {
     setBill(event.target.value);
+  }
+
+  //create an event handler that fires when button is pressed
+  function setPresetTip(event) {
+    //look for value from event JSON object and get data
+    //console.log(event.target.textContent);
+    //apply percentage to tip percentage box
+    applyPresetTip(event.target.textContent);
+  }
+
+  function applyPresetTip(percentage) {
+    if (percentage == "10%") {
+      //update state of setTipPercentage and apply value to tip Percentage box
+      setTipPercentage("10");
+
+      //  return;
+    } else if (percentage == "15%") {
+      //update state of setTipPercentage and apply value to tip Percentage box
+      setTipPercentage("15");
+
+      //   return;
+    } else if (percentage == "20%") {
+      //update state of setTipPercentage and apply value to tip Percentage box
+      setTipPercentage("20");
+
+      // return;
+    }
   }
 
   //when user types in tip in UI, detect the event
@@ -164,6 +192,15 @@ export default function App() {
         </button>
         <button type="button" onClick={resetValues}>
           Reset
+        </button>
+        <button type="button" onClick={setPresetTip}>
+          10%
+        </button>
+        <button type="button" onClick={setPresetTip}>
+          15%
+        </button>
+        <button type="button" onClick={setPresetTip}>
+          20%
         </button>
       </div>
       <div>
