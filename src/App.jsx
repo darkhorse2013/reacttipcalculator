@@ -1,4 +1,5 @@
-import { useState } from "react";
+//load React libaries
+import { useState, useEffect } from "react";
 import "./App.css";
 
 export default function App() {
@@ -16,7 +17,10 @@ export default function App() {
   //we are storing value for bill in react so that we can reference that and calculate total
 
   function handleBillChange(event) {
+    //update react state with what has been typed in the bill input box
     setBill(event.target.value);
+    // we now need to update total field
+    //calculateTotal();
   }
 
   //create an event handler that fires when button is pressed
@@ -26,6 +30,20 @@ export default function App() {
     //apply percentage to tip percentage box
     applyPresetTip(event.target.textContent);
   }
+
+  //Watch bill
+  //Watch tipPercentage
+  //If either changes
+  //→ run calculateTotal() using useEffect React hook
+
+  useEffect(
+    () => {
+      //When tipPercentage OR bill changes
+      calculateTotal();
+    },
+    //check if state has changed for either variables
+    [tipPercentage, bill],
+  );
 
   function applyPresetTip(percentage) {
     if (percentage == "10%") {
@@ -51,7 +69,11 @@ export default function App() {
   //we are storing value for tip in react so that we can reference that and calculate total
 
   function handleTipChange(event) {
+    //update state with what is typed in the tip input box
     setTipPercentage(event.target.value);
+    //console.log(event.target.value);
+    // we now need to update total field
+    //calculateTotal();
   }
 
   //event listener for reset values button
@@ -73,29 +95,20 @@ export default function App() {
 
     //ADD VALIDATION FOR NEGATIVE NUMBERS
     if (billValue < 0 && tipValue < 0) {
-      //clear previous validation
-      setTotalTip("");
-      setTotal("");
-      setBillError("Only positive values are allowed");
-      setTipError("Only positive values are allowed");
+      setBillError("Please enter a bill");
+      setTipError("Please enter a tip");
       return;
     }
 
     if (billValue < 0) {
-      //first clear total and tip state
-      setTotalTip("");
-      setTotal("");
       //set and clear previous validation
-      setBillError("Only positive values are allowed");
-      setTipError("");
+      setBillError("Please enter a bill");
       return;
     }
 
     if (tipValue < 0) {
-      setTotalTip("");
-      setTotal("");
       //set and clear previous validation
-      setTipError("Only positive values are allowed");
+      setTipError("Please enter a tip");
       setBillError("");
 
       return;
@@ -106,21 +119,21 @@ export default function App() {
 
     // Case 1: both invalid
     if (isNaN(billValue) && isNaN(tipValue)) {
-      setBillError("Nice try, but only numbers are allowed!");
-      setTipError("Nice try, but only numbers are allowed!");
+      //setBillError("Please enter a bill");
+      //setTipError("Please enter a tip");
       return;
     }
 
     // Case 2: bill invalid
     if (isNaN(billValue)) {
-      setBillError("Nice try, but only numbers are allowed!");
+      setBillError("Please enter a bill");
       setTipError("");
       return;
     }
 
     // Case 3: tip invalid
     if (isNaN(tipValue)) {
-      setTipError("Nice try, but only numbers are allowed!");
+      setTipError("Please enter a tip");
       setBillError("");
       return;
     }
@@ -187,9 +200,6 @@ export default function App() {
       </div>
 
       <div>
-        <button type="button" onClick={calculateTotal}>
-          Calculate
-        </button>
         <button type="button" onClick={resetValues}>
           Reset
         </button>
