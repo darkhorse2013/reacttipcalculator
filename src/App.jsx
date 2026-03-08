@@ -237,7 +237,7 @@ export default function App() {
           onChange={handleTipChange}
         />
       </div>
-      <div>Total number of People to split bill between:*</div>
+      <div>Total number of People to split bill between:</div>
       <span className="incorrectValue">{peopleError}</span>
       <div>
         <input
