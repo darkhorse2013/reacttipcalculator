@@ -105,35 +105,37 @@ export default function App() {
     let splitBetween = parseFloat(numberOfPeople);
 
     //ADD VALIDATION FOR NEGATIVE NUMBERS
-    if (billValue < 0 && tipValue < 0 && splitBetween < 0) {
-      setBillError("Bill cannot be negative");
-      setTipError("Tip cannot be negative");
-      setPeopleError("Total number of People cannot be negative");
+    //set flag
+    let hasError = false;
 
+    if (billValue < 0) {
+      setBillError("Bill cannot be negative");
+      hasError = true;
+    } else {
+      //if positive number clear error
+      setBillError("");
+    }
+
+    if (tipValue < 0) {
+      setTipError("Tip cannot be negative");
+      hasError = true;
+    } else {
+      //if positive number clear error
+      setTipError("");
+    }
+
+    if (splitBetween < 0) {
+      setPeopleError("Total number of People cannot be negative");
+      hasError = true;
+    } else {
+      //if positive number clear error
+      setPeopleError("");
+    }
+
+    if (hasError) {
       //clear old totals
       setTotalTip("");
       setTotal("");
-      return;
-    } else if (billValue < 0) {
-      setTipError("");
-      setPeopleError("");
-      setBillError("Bill cannot be negative");
-      setTotalTip("");
-      setTotal("");
-      return;
-    } else if (tipValue < 0) {
-      setBillError("");
-      setPeopleError("");
-      setTotalTip("");
-      setTotal("");
-      setTipError("Tip cannot be negative");
-      return;
-    } else if (splitBetween < 0) {
-      setBillError("");
-      setTipError("");
-      setTotalTip("");
-      setTotal("");
-      setPeopleError("Total number of People cannot be negative");
       return;
     }
 
@@ -141,9 +143,6 @@ export default function App() {
     //billValue = parsedValue
     //tipPercentage = original state
     //tipValue = parsedValue
-
-    //set flag
-    let hasError = false;
 
     if (bill !== "" && isNaN(billValue)) {
       setBillError("Bill has to be a number");
@@ -175,7 +174,7 @@ export default function App() {
     }
 
     // Calculate total if not a NAN, first check if either billValue or TipValue is NAN
-    if (isNaN(billValue) || isNaN(tipValue) || isNaN(splitBetween)) {
+    if (isNaN(billValue) || isNaN(tipValue)) {
       //make components blank
       setTotalTip("");
       //pass bill given back to UI
@@ -196,7 +195,7 @@ export default function App() {
   //created function to calculate Tip Amount so that we can potentially unit test this.
   //seperating business logic from UI
   function calculateTipAmount(billValue, tipValue) {
-    var calculateTipAmount = billValue * (tipValue / 100);
+    let calculateTipAmount = billValue * (tipValue / 100);
 
     return calculateTipAmount;
   }
@@ -206,7 +205,12 @@ export default function App() {
   function calculateFinalTotal(billValue, tipAmount, splitBetweenPeople) {
     let calculateFinalTotal;
 
-    calculateFinalTotal = (billValue + tipAmount) / splitBetweenPeople;
+    if (splitBetweenPeople > 0) {
+      calculateFinalTotal = (billValue + tipAmount) / splitBetweenPeople;
+    } else {
+      calculateFinalTotal = billValue + tipAmount;
+    }
+
     return calculateFinalTotal;
   }
 
