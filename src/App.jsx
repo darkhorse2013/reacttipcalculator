@@ -12,6 +12,9 @@ export default function App() {
   const [total, setTotal] = useState(""); // total including tip, displayed in the UI
   //get value from UI and store in state
   const [totalTip, setTotalTip] = useState("");
+  //get component state for number of people
+  const [numberOfPeople, setNumberOfPeople] = useState("");
+  const [peopleError, setPeopleError] = useState("");
 
   //create an event handler that fires when button is pressed
   //when user types in bill in UI, detect the event
@@ -31,6 +34,13 @@ export default function App() {
     applyPresetTip(event.target.textContent);
   }
 
+  //create an event handler that fires when number of people is specified
+  function setNumberOfPeopleEvent(event) {
+    //set state with value
+    //update state so that the value in the input box updates as someone types.
+    setNumberOfPeople(event.target.value);
+  }
+
   //Watch bill
   //Watch tipPercentage
   //If either changes
@@ -42,7 +52,7 @@ export default function App() {
       calculateTotal();
     },
     //check if state has changed for either variables
-    [tipPercentage, bill],
+    [tipPercentage, bill, numberOfPeople],
   );
 
   function applyPresetTip(percentage) {
@@ -81,28 +91,49 @@ export default function App() {
     setTipPercentage("");
     setTotalTip("");
     setTotal("");
+    setNumberOfPeople("");
     //clear errors on reset
     setBillError("");
     setTipError("");
+    setPeopleError("");
   }
 
   //calculate total
   function calculateTotal() {
-    var billValue = parseFloat(bill);
-    var tipValue = parseFloat(tipPercentage);
+    let billValue = parseFloat(bill);
+    let tipValue = parseFloat(tipPercentage);
+    let splitBetween = parseFloat(numberOfPeople);
 
     //ADD VALIDATION FOR NEGATIVE NUMBERS
-    if (billValue < 0 && tipValue < 0) {
+    if (billValue < 0 && tipValue < 0 && splitBetween < 0) {
       setBillError("Bill cannot be negative");
       setTipError("Tip cannot be negative");
+      setPeopleError("Total number of People cannot be negative");
+
+      //clear old totals
+      setTotalTip("");
+      setTotal("");
       return;
     } else if (billValue < 0) {
       setTipError("");
+      setPeopleError("");
       setBillError("Bill cannot be negative");
+      setTotalTip("");
+      setTotal("");
       return;
     } else if (tipValue < 0) {
       setBillError("");
+      setPeopleError("");
+      setTotalTip("");
+      setTotal("");
       setTipError("Tip cannot be negative");
+      return;
+    } else if (splitBetween < 0) {
+      setBillError("");
+      setTipError("");
+      setTotalTip("");
+      setTotal("");
+      setPeopleError("Total number of People cannot be negative");
       return;
     }
 
@@ -128,6 +159,13 @@ export default function App() {
       setTipError("");
     }
 
+    if (numberOfPeople !== "" && isNaN(splitBetween)) {
+      setPeopleError("Total number of people has to be a number");
+      hasError = true;
+    } else {
+      setPeopleError("");
+    }
+
     if (hasError) {
       //clear old totals
       setTotalTip("");
@@ -137,7 +175,7 @@ export default function App() {
     }
 
     // Calculate total if not a NAN, first check if either billValue or TipValue is NAN
-    if (isNaN(billValue) || isNaN(tipValue)) {
+    if (isNaN(billValue) || isNaN(tipValue) || isNaN(splitBetween)) {
       //make components blank
       setTotalTip("");
       //pass bill given back to UI
@@ -146,7 +184,7 @@ export default function App() {
     } else {
       //it is NAN, calculate
       var tipAmount = calculateTipAmount(billValue, tipValue);
-      var finalTotal = calculateFinalTotal(billValue, tipAmount);
+      var finalTotal = calculateFinalTotal(billValue, tipAmount, splitBetween);
       //pass tip given back to UI
       setTotalTip(tipAmount.toFixed(2));
 
@@ -165,8 +203,10 @@ export default function App() {
 
   //created function to calculate Final Total so that we can potentially unit test this.
   //seperating business logic from UI
-  function calculateFinalTotal(billValue, tipAmount) {
-    var calculateFinalTotal = billValue + tipAmount;
+  function calculateFinalTotal(billValue, tipAmount, splitBetweenPeople) {
+    let calculateFinalTotal;
+
+    calculateFinalTotal = (billValue + tipAmount) / splitBetweenPeople;
     return calculateFinalTotal;
   }
 
@@ -181,12 +221,7 @@ export default function App() {
       <div>Bill amount:*</div>
       <span className="incorrectValue">{billError}</span>
       <div>
-        <input
-          id="billAmount"
-          value={bill}
-          //type="number"
-          onChange={handleBillChange}
-        />
+        <input id="billAmount" value={bill} onChange={handleBillChange} />
       </div>
 
       <div>Tip Percentage:*</div>
@@ -195,8 +230,16 @@ export default function App() {
         <input
           id="tipPercentage"
           value={tipPercentage}
-          //type="number"
           onChange={handleTipChange}
+        />
+      </div>
+      <div>Total number of People to split bill between:*</div>
+      <span className="incorrectValue">{peopleError}</span>
+      <div>
+        <input
+          id="numberOfPeople"
+          value={numberOfPeople}
+          onChange={setNumberOfPeopleEvent}
         />
       </div>
 
