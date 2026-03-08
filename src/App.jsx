@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+//all functions can access anything within app
+//everytime state changes, react re-runs app function
 export default function App() {
   const [bill, setBill] = useState(""); // bill input value stored in React state
   const [tipPercentage, setTipPercentage] = useState(""); // tip input value stored in React state
@@ -19,8 +21,6 @@ export default function App() {
   function handleBillChange(event) {
     //update react state with what has been typed in the bill input box
     setBill(event.target.value);
-    // we now need to update total field
-    //calculateTotal();
   }
 
   //create an event handler that fires when button is pressed
@@ -72,8 +72,6 @@ export default function App() {
     //update state with what is typed in the tip input box
     setTipPercentage(event.target.value);
     //console.log(event.target.value);
-    // we now need to update total field
-    //calculateTotal();
   }
 
   //event listener for reset values button
@@ -95,62 +93,66 @@ export default function App() {
 
     //ADD VALIDATION FOR NEGATIVE NUMBERS
     if (billValue < 0 && tipValue < 0) {
-      setBillError("Please enter a bill");
-      setTipError("Please enter a tip");
+      setBillError("Bill cannot be negative");
+      setTipError("Tip cannot be negative");
       return;
-    }
-
-    if (billValue < 0) {
-      //set and clear previous validation
-      setBillError("Please enter a bill");
-      return;
-    }
-
-    if (tipValue < 0) {
-      //set and clear previous validation
-      setTipError("Please enter a tip");
-      setBillError("");
-
-      return;
-    }
-
-    // Reset output first (like clearing totalValue)
-    setTotal("");
-
-    // Case 1: both invalid
-    if (isNaN(billValue) && isNaN(tipValue)) {
-      //setBillError("Please enter a bill");
-      //setTipError("Please enter a tip");
-      return;
-    }
-
-    // Case 2: bill invalid
-    if (isNaN(billValue)) {
-      setBillError("Please enter a bill");
+    } else if (billValue < 0) {
       setTipError("");
+      setBillError("Bill cannot be negative");
       return;
-    }
-
-    // Case 3: tip invalid
-    if (isNaN(tipValue)) {
-      setTipError("Please enter a tip");
+    } else if (tipValue < 0) {
       setBillError("");
+      setTipError("Tip cannot be negative");
       return;
     }
 
-    // Case 4: valid inputs - clear errors
-    setBillError("");
-    setTipError("");
+    //bill = original state
+    //billValue = parsedValue
+    //tipPercentage = original state
+    //tipValue = parsedValue
 
-    // Calculate total
-    var tipAmount = calculateTipAmount(billValue, tipValue);
-    var finalTotal = calculateFinalTotal(billValue, tipAmount);
+    //set flag
+    let hasError = false;
 
-    //pass tip given back to UI
-    setTotalTip(tipAmount.toFixed(2));
+    if (bill !== "" && isNaN(billValue)) {
+      setBillError("Bill has to be a number");
+      hasError = true;
+    } else {
+      setBillError("");
+    }
 
-    //pass bill given back to UI
-    setTotal(finalTotal.toFixed(2));
+    if (tipPercentage !== "" && isNaN(tipValue)) {
+      setTipError("Tip has to be a number");
+      hasError = true;
+    } else {
+      setTipError("");
+    }
+
+    if (hasError) {
+      //clear old totals
+      setTotalTip("");
+      setTotal("");
+      //break out of function
+      return;
+    }
+
+    // Calculate total if not a NAN, first check if either billValue or TipValue is NAN
+    if (isNaN(billValue) || isNaN(tipValue)) {
+      //make components blank
+      setTotalTip("");
+      //pass bill given back to UI
+      setTotal("");
+      return;
+    } else {
+      //it is NAN, calculate
+      var tipAmount = calculateTipAmount(billValue, tipValue);
+      var finalTotal = calculateFinalTotal(billValue, tipAmount);
+      //pass tip given back to UI
+      setTotalTip(tipAmount.toFixed(2));
+
+      //pass bill given back to UI
+      setTotal(finalTotal.toFixed(2));
+    }
   }
 
   //created function to calculate Tip Amount so that we can potentially unit test this.
@@ -165,7 +167,6 @@ export default function App() {
   //seperating business logic from UI
   function calculateFinalTotal(billValue, tipAmount) {
     var calculateFinalTotal = billValue + tipAmount;
-
     return calculateFinalTotal;
   }
 
@@ -177,7 +178,7 @@ export default function App() {
 
       <div>Enter the bill amount</div>
 
-      <div>Bill amount:</div>
+      <div>Bill amount:*</div>
       <span className="incorrectValue">{billError}</span>
       <div>
         <input
@@ -188,7 +189,7 @@ export default function App() {
         />
       </div>
 
-      <div>Tip Percentage:</div>
+      <div>Tip Percentage:*</div>
       <span className="incorrectValue">{tipError}</span>
       <div>
         <input
