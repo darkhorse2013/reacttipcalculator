@@ -188,7 +188,11 @@ export default function App() {
       setTotalTip(tipAmount.toFixed(2));
 
       //pass bill given back to UI
-      setTotal(finalTotal.toFixed(2));
+      if (splitBetween > 0) {
+        setTotal(finalTotal.toFixed(2) + " per person");
+      } else {
+        setTotal(finalTotal.toFixed(2));
+      }
     }
   }
 
