@@ -15,6 +15,7 @@ export default function App() {
   //get component state for number of people
   const [numberOfPeople, setNumberOfPeople] = useState("");
   const [peopleError, setPeopleError] = useState("");
+  let totalLabel = "Total:";
 
   //create an event handler that fires when button is pressed
   //when user types in bill in UI, detect the event
@@ -188,11 +189,7 @@ export default function App() {
       setTotalTip(tipAmount.toFixed(2));
 
       //pass bill given back to UI
-      if (splitBetween > 0) {
-        setTotal(finalTotal.toFixed(2) + " per person");
-      } else {
-        setTotal(finalTotal.toFixed(2));
-      }
+      setTotal(finalTotal.toFixed(2));
     }
   }
 
@@ -216,6 +213,11 @@ export default function App() {
     }
 
     return calculateFinalTotal;
+  }
+
+  //recalculate every render of app component
+  if (parseFloat(numberOfPeople) > 0) {
+    totalLabel = "Total per person:";
   }
 
   return (
@@ -269,7 +271,7 @@ export default function App() {
         Tip amount: £<span className="totalValue">{totalTip}</span>
       </div>
       <div>
-        Total: £<span className="totalValue">{total}</span>
+        {totalLabel} £<span className="totalValue">{total}</span>
       </div>
     </div>
   );
