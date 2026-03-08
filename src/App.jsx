@@ -266,10 +266,10 @@ export default function App() {
         </button>
       </div>
       <div>
-        Tip amount: £<span id="totalValue">{totalTip}</span>
+        Tip amount: £<span className="totalValue">{totalTip}</span>
       </div>
       <div>
-        Total: £<span id="totalValue">{total}</span>
+        Total: £<span className="totalValue">{total}</span>
       </div>
     </div>
   );
