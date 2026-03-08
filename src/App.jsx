@@ -56,17 +56,17 @@ export default function App() {
   );
 
   function applyPresetTip(percentage) {
-    if (percentage == "10%") {
+    if (percentage === "10%") {
       //update state of setTipPercentage and apply value to tip Percentage box
       setTipPercentage("10");
 
       //  return;
-    } else if (percentage == "15%") {
+    } else if (percentage === "15%") {
       //update state of setTipPercentage and apply value to tip Percentage box
       setTipPercentage("15");
 
       //   return;
-    } else if (percentage == "20%") {
+    } else if (percentage === "20%") {
       //update state of setTipPercentage and apply value to tip Percentage box
       setTipPercentage("20");
 
