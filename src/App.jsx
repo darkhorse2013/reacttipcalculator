@@ -14,6 +14,9 @@ export default function App() {
   const [selectedCurrency, setSelectedCurrency] = useState("GBP");
 
   let totalLabel = "Total:";
+  //for conditional div
+  let overallTotalDiv;
+  let overallTotal;
 
   //create an event handler that fires when button is pressed
   //when user types in bill in UI, detect the event
@@ -163,6 +166,7 @@ export default function App() {
       if (exchangeRates.rates[selectedCurrency] == null) {
         //if GBP (undefined)
         total = finalTotal.toFixed(2) + " " + "GBP";
+        overallTotal = billValue + tipAmount + " " + selectedCurrency;
 
         totalTip = tipAmount.toFixed(2) + " " + "GBP";
       } else {
@@ -170,6 +174,7 @@ export default function App() {
         total = finalTotal.toFixed(2) + " " + selectedCurrency;
         tipAmount = tipAmount * exchangeRates.rates[selectedCurrency];
         totalTip = tipAmount.toFixed(2) + " " + selectedCurrency;
+        overallTotal = billValue + tipAmount + " " + selectedCurrency;
       }
     }
   }
@@ -188,8 +193,6 @@ export default function App() {
     let calculateFinalTotal;
 
     if (splitBetweenPeople > 0) {
-      //converted total
-
       calculateFinalTotal = (billValue + tipAmount) / splitBetweenPeople;
     } else {
       calculateFinalTotal = billValue + tipAmount;
@@ -203,6 +206,13 @@ export default function App() {
 
   if (parseFloat(numberOfPeople) > 0) {
     totalLabel = "Total per person:";
+    //add overall total
+
+    overallTotalDiv = (
+      <div>
+        Overall total: <span className="totalValue">{overallTotal}</span>
+      </div>
+    );
   }
 
   return (
@@ -271,6 +281,7 @@ export default function App() {
       <div>
         {totalLabel} <span className="totalValue">{total}</span>
       </div>
+      <div>{overallTotalDiv}</div>
     </div>
   );
 }
