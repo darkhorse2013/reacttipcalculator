@@ -7,14 +7,9 @@ import "./App.css";
 export default function App() {
   const [bill, setBill] = useState(""); // bill input value stored in React state
   const [tipPercentage, setTipPercentage] = useState(""); // tip input value stored in React state
-  const [billError, setBillError] = useState(""); // error message for bill input
-  const [tipError, setTipError] = useState(""); // error message for tip input
-  const [total, setTotal] = useState(""); // total including tip, displayed in the UI
   //get value from UI and store in state
-  const [totalTip, setTotalTip] = useState("");
   //get component state for number of people
   const [numberOfPeople, setNumberOfPeople] = useState("");
-  const [peopleError, setPeopleError] = useState("");
   let totalLabel = "Total:";
 
   //create an event handler that fires when button is pressed
@@ -47,6 +42,7 @@ export default function App() {
   //If either changes
   //→ run calculateTotal() using useEffect React hook
 
+  /*
   useEffect(
     () => {
       //When tipPercentage OR bill changes
@@ -55,6 +51,8 @@ export default function App() {
     //check if state has changed for either variables
     [tipPercentage, bill, numberOfPeople],
   );
+
+  */
 
   function applyPresetTip(percentage) {
     if (percentage === "10%") {
@@ -88,109 +86,69 @@ export default function App() {
   //event listener for reset values button
   function resetValues() {
     //update state of components
+
+    //get values from state and reset
     setBill("");
-    setTipPercentage("");
-    setTotalTip("");
-    setTotal("");
     setNumberOfPeople("");
-    //clear errors on reset
-    setBillError("");
-    setTipError("");
-    setPeopleError("");
+    setTipPercentage("");
   }
 
   //calculate total
-  function calculateTotal() {
-    let billValue = parseFloat(bill);
-    let tipValue = parseFloat(tipPercentage);
-    let splitBetween = parseFloat(numberOfPeople);
+  let billValue = parseFloat(bill);
+  let tipValue = parseFloat(tipPercentage);
+  let splitBetween = parseFloat(numberOfPeople);
+  let billError;
+  let tipError;
+  let peopleError;
+  let totalTip;
+  let total;
 
-    //ADD VALIDATION FOR NEGATIVE NUMBERS
-    //set flag
-    let hasError = false;
+  //ADD VALIDATION FOR NEGATIVE NUMBERS
+  if (billValue < 0) {
+    billError = "Bill cannot be negative";
+  }
 
-    if (billValue < 0) {
-      setBillError("Bill cannot be negative");
-      hasError = true;
-    } else {
-      //if positive number clear error
-      setBillError("");
-    }
+  if (tipValue < 0) {
+    tipError = "Tip cannot be negative";
+  }
 
-    if (tipValue < 0) {
-      setTipError("Tip cannot be negative");
-      hasError = true;
-    } else {
-      //if positive number clear error
-      setTipError("");
-    }
+  if (splitBetween < 0) {
+    peopleError = "Total number of People cannot be negative";
+  }
 
-    if (splitBetween < 0) {
-      setPeopleError("Total number of People cannot be negative");
-      hasError = true;
-    } else {
-      //if positive number clear error
-      setPeopleError("");
-    }
+  //bill = original state
+  //billValue = parsedValue
+  //tipPercentage = original state
+  //tipValue = parsedValue
 
-    if (hasError) {
-      //clear old totals
-      setTotalTip("");
-      setTotal("");
-      return;
-    }
+  if (bill !== "" && isNaN(billValue)) {
+    billError = "Bill has to be a number";
+  }
 
-    //bill = original state
-    //billValue = parsedValue
-    //tipPercentage = original state
-    //tipValue = parsedValue
+  if (tipPercentage !== "" && isNaN(tipValue)) {
+    tipError = "Tip has to be a number";
+  }
 
-    if (bill !== "" && isNaN(billValue)) {
-      setBillError("Bill has to be a number");
-      hasError = true;
-    } else {
-      setBillError("");
-    }
+  if (numberOfPeople !== "" && isNaN(splitBetween)) {
+    peopleError = "Total number of people has to be a number";
+  }
 
-    if (tipPercentage !== "" && isNaN(tipValue)) {
-      setTipError("Tip has to be a number");
-      hasError = true;
-    } else {
-      setTipError("");
-    }
+  // Calculate total if not a NAN, first check if either billValue or TipValue is NAN
+  if (isNaN(billValue) || isNaN(tipValue)) {
+    //make components blank
+    totalTip = "";
+    //pass bill given back to UI
+    total = "";
+  } else {
+    //it is NAN, calculate
+    let tipAmount = calculateTipAmount(billValue, tipValue);
+    let finalTotal = calculateFinalTotal(billValue, tipAmount, splitBetween);
+    //pass tip given back to UI
+    totalTip = tipAmount.toFixed(2);
+    //pass bill and tip back to UI
 
-    if (numberOfPeople !== "" && isNaN(splitBetween)) {
-      setPeopleError("Total number of people has to be a number");
-      hasError = true;
-    } else {
-      setPeopleError("");
-    }
-
-    if (hasError) {
-      //clear old totals
-      setTotalTip("");
-      setTotal("");
-      //break out of function
-      return;
-    }
-
-    // Calculate total if not a NAN, first check if either billValue or TipValue is NAN
-    if (isNaN(billValue) || isNaN(tipValue)) {
-      //make components blank
-      setTotalTip("");
-      //pass bill given back to UI
-      setTotal("");
-      return;
-    } else {
-      //it is NAN, calculate
-      var tipAmount = calculateTipAmount(billValue, tipValue);
-      var finalTotal = calculateFinalTotal(billValue, tipAmount, splitBetween);
-      //pass tip given back to UI
-      setTotalTip(tipAmount.toFixed(2));
-
-      //pass bill given back to UI
-      setTotal(finalTotal.toFixed(2));
-    }
+    total = finalTotal.toFixed(2);
+    totalTip = tipAmount.toFixed(2);
   }
 
   //created function to calculate Tip Amount so that we can potentially unit test this.
