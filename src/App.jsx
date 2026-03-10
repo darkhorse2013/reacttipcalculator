@@ -166,11 +166,9 @@ export default function App() {
 
         totalTip = tipAmount.toFixed(2) + " " + "GBP";
       } else {
-        finalTotal =
-          finalTotal * parseFloat(exchangeRates.rates[selectedCurrency]);
+        finalTotal = finalTotal * exchangeRates.rates[selectedCurrency];
         total = finalTotal.toFixed(2) + " " + selectedCurrency;
-        tipAmount =
-          tipAmount * parseFloat(exchangeRates.rates[selectedCurrency]);
+        tipAmount = tipAmount * exchangeRates.rates[selectedCurrency];
         totalTip = tipAmount.toFixed(2) + " " + selectedCurrency;
       }
     }
