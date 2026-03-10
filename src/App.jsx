@@ -10,6 +10,9 @@ export default function App() {
   //get value from UI and store in state
   //get component state for number of people
   const [numberOfPeople, setNumberOfPeople] = useState("");
+  const [exchangeRates, setRates] = useState(null);
+  const [selectedCurrency, setSelectedCurrency] = useState("GBP");
+
   let totalLabel = "Total:";
 
   //create an event handler that fires when button is pressed
@@ -37,22 +40,22 @@ export default function App() {
     setNumberOfPeople(event.target.value);
   }
 
-  //Watch bill
-  //Watch tipPercentage
-  //If either changes
-  //→ run calculateTotal() using useEffect React hook
+  //make an api call and then persistently store in state.
+  useEffect(() => {
+    fetch("https://api.frankfurter.dev/v1/latest?from=GBP")
+      .then((response) => response.json())
+      .then((data) => {
+        //console.log(data);
+        setRates(data);
+      });
+  }, []);
 
-  /*
-  useEffect(
-    () => {
-      //When tipPercentage OR bill changes
-      calculateTotal();
-    },
-    //check if state has changed for either variables
-    [tipPercentage, bill, numberOfPeople],
-  );
+  //event handler for currency select box
 
-  */
+  function handleCurrencySelect(event) {
+    //event.target.value
+    setSelectedCurrency(event.target.value);
+  }
 
   function applyPresetTip(percentage) {
     if (percentage === "10%") {
@@ -147,8 +150,30 @@ export default function App() {
     totalTip = tipAmount.toFixed(2);
     //pass bill and tip back to UI
 
-    total = finalTotal.toFixed(2);
-    totalTip = tipAmount.toFixed(2);
+    // get exchange rate for USD and convert
+    //amount * rate = target currency
+    //get bill and total amount and convert to USD
+    //apply exchange rate
+
+    if (exchangeRates == null) {
+      total = finalTotal.toFixed(2) + " " + "GBP";
+      totalTip = tipAmount.toFixed(2) + " " + "GBP";
+    } else {
+      //apply exchange rate if loaded
+      if (exchangeRates.rates[selectedCurrency] == null) {
+        //if GBP (undefined)
+        total = finalTotal.toFixed(2) + " " + "GBP";
+
+        totalTip = tipAmount.toFixed(2) + " " + "GBP";
+      } else {
+        finalTotal =
+          finalTotal * parseFloat(exchangeRates.rates[selectedCurrency]);
+        total = finalTotal.toFixed(2) + " " + selectedCurrency;
+        tipAmount =
+          tipAmount * parseFloat(exchangeRates.rates[selectedCurrency]);
+        totalTip = tipAmount.toFixed(2) + " " + selectedCurrency;
+      }
+    }
   }
 
   //created function to calculate Tip Amount so that we can potentially unit test this.
@@ -165,6 +190,8 @@ export default function App() {
     let calculateFinalTotal;
 
     if (splitBetweenPeople > 0) {
+      //converted total
+
       calculateFinalTotal = (billValue + tipAmount) / splitBetweenPeople;
     } else {
       calculateFinalTotal = billValue + tipAmount;
@@ -212,7 +239,20 @@ export default function App() {
           onChange={setNumberOfPeopleEvent}
         />
       </div>
-
+      <div>
+        <div>Select currency:</div>
+        <select
+          name="exchangeRates"
+          id="currency"
+          onChange={handleCurrencySelect}
+          value={selectedCurrency}
+        >
+          <option value="GBP">GBP</option>
+          <option value="EUR">EUR</option>
+          <option value="USD">USD</option>
+          <option value="CAD">CAD</option>
+        </select>
+      </div>
       <div>
         <button type="button" onClick={resetValues}>
           Reset
@@ -228,10 +268,10 @@ export default function App() {
         </button>
       </div>
       <div>
-        Tip amount: £<span className="totalValue">{totalTip}</span>
+        Tip amount: <span className="totalValue">{totalTip}</span>
       </div>
       <div>
-        {totalLabel} £<span className="totalValue">{total}</span>
+        {totalLabel} <span className="totalValue">{total}</span>
       </div>
     </div>
   );
