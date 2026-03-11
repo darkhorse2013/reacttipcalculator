@@ -248,8 +248,9 @@ export default function App() {
         onChange={handleCurrencySelect}
         value={selectedCurrency}
       >
-        //add base rate to list too
+        {/* add base rate to list too */}
         <option value={exchangeRates.base}>{exchangeRates.base}</option>
+        {/* add all other currencies to list too */}
         {Object.keys(currencyCode).map((currencyCode) => (
           <option key={currencyCode} value={currencyCode}>
             {currencyCode}
