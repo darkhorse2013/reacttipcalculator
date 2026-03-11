@@ -226,9 +226,6 @@ export default function App() {
   }
 
   //all currency selector
-
-  //  console.log("view json object ", exchangeRates.rates);
-
   //if JSON object hasn't arrived yet
   if (exchangeRates === null) {
     allCurrenciesSelector = (
@@ -318,6 +315,7 @@ export default function App() {
       <div>
         {totalLabel} <span className="totalValue">{total}</span>
       </div>
+
       {overallTotalDiv}
     </div>
   );
