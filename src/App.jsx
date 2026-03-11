@@ -5,7 +5,8 @@ import "./App.css";
 //all functions can access anything within app
 //everytime state changes, react re-runs app function
 export default function App() {
-  // data that we want to persistently store in a react state
+  // data that we want to persistently store in a react state for later use.
+  //state - source data controlled by the user or external inputs
   const [bill, setBill] = useState("");
   const [tipPercentage, setTipPercentage] = useState("");
   const [numberOfPeople, setNumberOfPeople] = useState("");
@@ -14,7 +15,7 @@ export default function App() {
 
   let totalLabel = "Total:";
 
-  //derived data. Data that is not persistently stored in a react state, and is accessed upon initial render.
+  //derived data -  data values recalculated on every render based on state.
   let overallTotal;
   let billError;
   let tipError;
