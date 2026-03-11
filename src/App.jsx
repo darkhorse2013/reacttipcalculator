@@ -27,6 +27,7 @@ export default function App() {
 
   //for conditional div
   let overallTotalDiv;
+  let selectExchangeRateHTML;
 
   //create an event handler that fires when button is pressed
   //when user types in bill in UI, detect the event
@@ -268,6 +269,8 @@ export default function App() {
           <option value="USD">USD</option>
           <option value="CAD">CAD</option>
         </select>
+
+        {selectExchangeRateHTML}
       </div>
       <div>
         <button type="button" onClick={resetValues}>
