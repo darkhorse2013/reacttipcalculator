@@ -5,18 +5,27 @@ import "./App.css";
 //all functions can access anything within app
 //everytime state changes, react re-runs app function
 export default function App() {
-  const [bill, setBill] = useState(""); // bill input value stored in React state
-  const [tipPercentage, setTipPercentage] = useState(""); // tip input value stored in React state
-  //get value from UI and store in state
-  //get component state for number of people
+  // data that we want to persistently store in a react state
+  const [bill, setBill] = useState("");
+  const [tipPercentage, setTipPercentage] = useState("");
   const [numberOfPeople, setNumberOfPeople] = useState("");
   const [exchangeRates, setRates] = useState(null);
   const [selectedCurrency, setSelectedCurrency] = useState("GBP");
 
   let totalLabel = "Total:";
+
+  //derived data. Data that is not persistently stored in a react state, and is accessed upon initial render.
+  let overallTotal;
+  let billError;
+  let tipError;
+  let peopleError;
+  let totalTip;
+  let total;
+  let tipAmount;
+  let finalTotal;
+
   //for conditional div
   let overallTotalDiv;
-  let overallTotal;
 
   //create an event handler that fires when button is pressed
   //when user types in bill in UI, detect the event
@@ -103,11 +112,6 @@ export default function App() {
   let billValue = parseFloat(bill);
   let tipValue = parseFloat(tipPercentage);
   let splitBetween = parseFloat(numberOfPeople);
-  let billError;
-  let tipError;
-  let peopleError;
-  let totalTip;
-  let total;
 
   //ADD VALIDATION FOR NEGATIVE NUMBERS
   if (billValue < 0) {
@@ -147,8 +151,8 @@ export default function App() {
     total = "";
   } else {
     //it is NAN, calculate
-    let tipAmount = calculateTipAmount(billValue, tipValue);
-    let finalTotal = calculateFinalTotal(billValue, tipAmount, splitBetween);
+    tipAmount = calculateTipAmount(billValue, tipValue);
+    finalTotal = calculateFinalTotal(billValue, tipAmount, splitBetween);
     //pass tip given back to UI
     totalTip = tipAmount.toFixed(2);
     //pass bill and tip back to UI
