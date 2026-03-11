@@ -15,7 +15,7 @@ export default function App() {
 
   let totalLabel = "Total:";
 
-  //derived data -  data values recalculated on every render based on state. These values are not stored in memory.
+  //derived data -  data values recalculated on every render based on state. These values are not persistedly stored in memory.
   let overallTotal;
   let billError;
   let tipError;
@@ -175,11 +175,18 @@ export default function App() {
 
         totalTip = tipAmount.toFixed(2) + " " + "GBP";
       } else {
-        finalTotal = finalTotal * exchangeRates.rates[selectedCurrency];
+        const rate = exchangeRates.rates[selectedCurrency];
+
+        finalTotal = finalTotal * rate;
         total = finalTotal.toFixed(2) + " " + selectedCurrency;
-        tipAmount = tipAmount * exchangeRates.rates[selectedCurrency];
+        tipAmount = tipAmount * rate;
         totalTip = tipAmount.toFixed(2) + " " + selectedCurrency;
-        overallTotal = billValue + tipAmount + " " + selectedCurrency;
+
+        console.log(rate);
+        console.log("bill value in pounds " + billValue);
+        console.log("tip amount in pounds " + tipAmount);
+        overallTotal =
+          (billValue * rate + tipAmount).toFixed(2) + " " + selectedCurrency;
       }
     }
   }
