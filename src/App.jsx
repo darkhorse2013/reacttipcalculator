@@ -6,7 +6,7 @@ import "./App.css";
 //everytime state changes, react re-runs app function
 export default function App() {
   // data that we want to persistently store in a react state for later use.
-  //state - source data controlled by the user or external inputs
+  //state - source data controlled by the user or external inputs e.g. when a user types something in an input box
   const [bill, setBill] = useState("");
   const [tipPercentage, setTipPercentage] = useState("");
   const [numberOfPeople, setNumberOfPeople] = useState("");
@@ -15,7 +15,7 @@ export default function App() {
 
   let totalLabel = "Total:";
 
-  //derived data -  data values recalculated on every render based on state.
+  //derived data -  data values recalculated on every render based on state. These values are not stored in memory.
   let overallTotal;
   let billError;
   let tipError;
