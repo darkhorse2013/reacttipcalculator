@@ -28,6 +28,7 @@ export default function App() {
   //for conditional div
   let overallTotalDiv;
   let selectExchangeRateHTML;
+  let allCurrenciesSelector;
 
   //create an event handler that fires when button is pressed
   //when user types in bill in UI, detect the event
@@ -224,6 +225,40 @@ export default function App() {
     );
   }
 
+  //all currency selector
+
+  //  console.log("view json object ", exchangeRates.rates);
+
+  //if JSON object hasn't arrived yet
+  if (exchangeRates === null) {
+    allCurrenciesSelector = (
+      <div>
+        <b>Fetching exchange rates</b>
+      </div>
+    );
+  } else {
+    let currencyCode = exchangeRates.rates;
+
+    //we have our list of currencies, now lets add them into a dropdown box
+
+    allCurrenciesSelector = (
+      <select
+        name="exchangeRates"
+        id="currency"
+        onChange={handleCurrencySelect}
+        value={selectedCurrency}
+      >
+        //add base rate to list too
+        <option value={exchangeRates.base}>{exchangeRates.base}</option>
+        {Object.keys(currencyCode).map((currencyCode) => (
+          <option key={currencyCode} value={currencyCode}>
+            {currencyCode}
+          </option>
+        ))}
+      </select>
+    );
+  }
+
   return (
     <div className="container-properties">
       <div id="title">
@@ -257,21 +292,11 @@ export default function App() {
         />
       </div>
       <div>
-        <div>Select currency:</div>
-        <select
-          name="exchangeRates"
-          id="currency"
-          onChange={handleCurrencySelect}
-          value={selectedCurrency}
-        >
-          <option value="GBP">GBP</option>
-          <option value="EUR">EUR</option>
-          <option value="USD">USD</option>
-          <option value="CAD">CAD</option>
-        </select>
-
-        {selectExchangeRateHTML}
+        <b>Select currency:</b>
       </div>
+
+      {allCurrenciesSelector}
+
       <div>
         <button type="button" onClick={resetValues}>
           Reset
