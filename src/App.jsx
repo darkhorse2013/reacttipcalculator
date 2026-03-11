@@ -181,10 +181,6 @@ export default function App() {
         total = finalTotal.toFixed(2) + " " + selectedCurrency;
         tipAmount = tipAmount * rate;
         totalTip = tipAmount.toFixed(2) + " " + selectedCurrency;
-
-        console.log(rate);
-        console.log("bill value in pounds " + billValue);
-        console.log("tip amount in pounds " + tipAmount);
         overallTotal =
           (billValue * rate + tipAmount).toFixed(2) + " " + selectedCurrency;
       }
