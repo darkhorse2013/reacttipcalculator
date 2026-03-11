@@ -281,7 +281,7 @@ export default function App() {
       <div>
         {totalLabel} <span className="totalValue">{total}</span>
       </div>
-      <div>{overallTotalDiv}</div>
+      {overallTotalDiv}
     </div>
   );
 }
