@@ -2,6 +2,141 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+//create component - have to use PascalCase when naming components PascalCase , upper first and middle letter
+//pass parameters from JSX into function and generate UI
+function BillInput({ bill, billError, onBillChange }) {
+  return (
+    <>
+      <div>Bill amount:*</div>
+      <span className="incorrectValue">{billError}</span>
+      <div>
+        <input id="billAmount" value={bill} onChange={onBillChange} />
+      </div>
+    </>
+  );
+}
+
+//create component (reusable snippet of code)
+//pass parameters from JSX into function and generate UI
+function TipInput({ tipPercentage, tipError, onTipChange }) {
+  return (
+    <>
+      <div>Tip Percentage:*</div>
+      <span className="incorrectValue">{tipError}</span>
+      <div>
+        <input
+          id="tipPercentage"
+          value={tipPercentage}
+          onChange={onTipChange}
+        />
+      </div>
+    </>
+  );
+}
+
+//create component (reusable snippet of code)
+//pass parameters from JSX into function and generate UI
+function TipButtons({ onReset, onPresetTip }) {
+  return (
+    <div>
+      <button type="button" onClick={onReset}>
+        Reset
+      </button>
+      <button type="button" onClick={onPresetTip}>
+        10%
+      </button>
+      <button type="button" onClick={onPresetTip}>
+        15%
+      </button>
+      <button type="button" onClick={onPresetTip}>
+        20%
+      </button>
+    </div>
+  );
+}
+
+//create component (reusable snippet of code)
+//pass parameters from JSX into function and generate UI
+function PeopleInput({ numberOfPeople, peopleError, onPeopleChange }) {
+  return (
+    <>
+      <div>Total number of People to split bill between:</div>
+      <span className="incorrectValue">{peopleError}</span>
+      <div>
+        <input
+          id="numberOfPeople"
+          value={numberOfPeople}
+          onChange={onPeopleChange}
+        />
+      </div>
+    </>
+  );
+}
+
+//create component (reusable snippet of code)
+//pass parameters from JSX into function and generate UI
+function TotalTipAmount({ tipAmount }) {
+  return (
+    <>
+      <div>
+        Tip amount: <span className="totalValue">{tipAmount}</span>
+      </div>
+    </>
+  );
+}
+
+//create component (reusable snippet of code)
+//pass parameters from JSX into function and generate UI
+function TotalValue({ totalLabel, total }) {
+  return (
+    <>
+      <div>
+        {totalLabel} <span className="totalValue">{total}</span>
+      </div>
+    </>
+  );
+}
+
+//create component (reusable snippet of code)
+//pass parameters from JSX into function and generate UI
+function OverallTotal({ overallTotal }) {
+  return <>{overallTotal}</>;
+}
+
+//create component (reusable snippet of code)
+//currency selector function
+function CurrencySelector({
+  exchangeRates,
+  selectedCurrency,
+  onCurrencyChange,
+}) {
+  if (exchangeRates === null) {
+    return (
+      <div>
+        <b>Fetching exchange rates</b>
+      </div>
+    );
+  }
+
+  const currencyCode = exchangeRates.rates;
+
+  return (
+    <select
+      name="exchangeRates"
+      id="currency"
+      onChange={onCurrencyChange}
+      value={selectedCurrency}
+    >
+      <option value={exchangeRates.base}>{exchangeRates.base}</option>
+      {Object.keys(currencyCode).map((currencyCode) => (
+        <option key={currencyCode} value={currencyCode}>
+          {currencyCode}
+        </option>
+      ))}
+    </select>
+  );
+}
+
 //all functions can access anything within app
 //everytime state changes, react re-runs app function
 export default function App() {
@@ -27,8 +162,6 @@ export default function App() {
 
   //for conditional div
   let overallTotalDiv;
-  let selectExchangeRateHTML;
-  let allCurrenciesSelector;
 
   //create an event handler that fires when button is pressed
   //when user types in bill in UI, detect the event
@@ -225,98 +358,77 @@ export default function App() {
     );
   }
 
-  //all currency selector
+  //all currency selector - old code , replaced with a component, leaving for comparison
   //if JSON object hasn't arrived yet
-  if (exchangeRates === null) {
-    allCurrenciesSelector = (
-      <div>
-        <b>Fetching exchange rates</b>
-      </div>
-    );
-  } else {
-    let currencyCode = exchangeRates.rates;
+  //if (exchangeRates === null) {
+  //allCurrenciesSelector = (
+  // <div>
+  //  <b>Fetching exchange rates</b>
+  // </div>
+  //  );
+  //} else {
+  // let currencyCode = exchangeRates.rates;
 
-    //we have our list of currencies, now lets add them into a dropdown box
+  //we have our list of currencies, now lets add them into a dropdown box
 
-    allCurrenciesSelector = (
-      <select
-        name="exchangeRates"
-        id="currency"
-        onChange={handleCurrencySelect}
-        value={selectedCurrency}
-      >
-        {/* add base rate to list too */}
-        <option value={exchangeRates.base}>{exchangeRates.base}</option>
-        {/* add all other currencies to list too */}
-        {Object.keys(currencyCode).map((currencyCode) => (
-          <option key={currencyCode} value={currencyCode}>
-            {currencyCode}
-          </option>
-        ))}
-      </select>
-    );
-  }
+  // allCurrenciesSelector = (
+  // <select
+  //  name="exchangeRates"
+  // id="currency"
+  // onChange={handleCurrencySelect}
+  // value={selectedCurrency}
+  //>
+  // {/* add base rate to list too */}
+  // <option value={exchangeRates.base}>{exchangeRates.base}</option>
+  // {/* add all other currencies to list too */}
+  // {Object.keys(currencyCode).map((currencyCode) => (
+  // <option key={currencyCode} value={currencyCode}>
+  //   {currencyCode}
+  // </option>
+  // ))}
+  // </select>
+  // );
+  // }
 
   return (
     <div className="container-properties">
       <div id="title">
         <h1>Tip Calculator</h1>
       </div>
+      <BillInput
+        bill={bill}
+        billError={billError}
+        onBillChange={handleBillChange}
+      />
 
-      <div>Enter the bill amount</div>
+      <TipInput
+        tipPercentage={tipPercentage}
+        tipError={tipError}
+        onTipChange={handleTipChange}
+      />
 
-      <div>Bill amount:*</div>
-      <span className="incorrectValue">{billError}</span>
-      <div>
-        <input id="billAmount" value={bill} onChange={handleBillChange} />
-      </div>
+      <PeopleInput
+        numberOfPeople={numberOfPeople}
+        peopleError={peopleError}
+        onPeopleChange={setNumberOfPeopleEvent}
+      />
 
-      <div>Tip Percentage:*</div>
-      <span className="incorrectValue">{tipError}</span>
-      <div>
-        <input
-          id="tipPercentage"
-          value={tipPercentage}
-          onChange={handleTipChange}
-        />
-      </div>
-      <div>Total number of People to split bill between:</div>
-      <span className="incorrectValue">{peopleError}</span>
-      <div>
-        <input
-          id="numberOfPeople"
-          value={numberOfPeople}
-          onChange={setNumberOfPeopleEvent}
-        />
-      </div>
-      <div>
-        <b>Select currency:</b>
-      </div>
+      <CurrencySelector
+        exchangeRates={exchangeRates}
+        selectedCurrency={selectedCurrency}
+        onCurrencyChange={handleCurrencySelect}
+      />
 
-      {allCurrenciesSelector}
+      <TipButtons onReset={resetValues} onPresetTip={setPresetTip} />
 
-      <div>
-        <button type="button" onClick={resetValues}>
-          Reset
-        </button>
-        <button type="button" onClick={setPresetTip}>
-          10%
-        </button>
-        <button type="button" onClick={setPresetTip}>
-          15%
-        </button>
-        <button type="button" onClick={setPresetTip}>
-          20%
-        </button>
-      </div>
-      <div>
-        Tip amount: <span className="totalValue">{totalTip}</span>
-      </div>
-      <div>
-        {totalLabel} <span className="totalValue">{total}</span>
-      </div>
+      <TotalTipAmount tipAmount={totalTip} />
 
+      <TotalValue totalLabel={totalLabel} total={total} />
+
+      <OverallTotal overallTotal={overallTotalDiv} />
+      {/*
       {overallTotalDiv}
+      */}
     </div>
   );
 }
