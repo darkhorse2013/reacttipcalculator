@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
-//IMPORT UI LOGIC
+//IMPORT UI LOGIC. SEPERATE FROM CONTROLLER.
 import BillInput from "./components/BillInput";
 import TipButtons from "./components/TipButtons";
 import TipInput from "./components/TipInput";
