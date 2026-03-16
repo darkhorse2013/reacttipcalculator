@@ -1,6 +1,8 @@
 //load React libaries
 import { useState, useEffect } from "react";
 import "./App.css";
+
+//IMPORT UI LOGIC
 import BillInput from "./components/BillInput";
 import TipButtons from "./components/TipButtons";
 import TipInput from "./components/TipInput";
@@ -18,7 +20,7 @@ export default function App() {
   const [bill, setBill] = useState("");
   const [tipPercentage, setTipPercentage] = useState("");
   const [numberOfPeople, setNumberOfPeople] = useState("");
-  const [exchangeRates, setRates] = useState(null);
+  const [exchangeRates, setExchangeRates] = useState(null);
   const [selectedCurrency, setSelectedCurrency] = useState("GBP");
 
   let totalLabel = "Total:";
@@ -67,7 +69,7 @@ export default function App() {
       .then((response) => response.json())
       .then((data) => {
         //console.log(data);
-        setRates(data);
+        setExchangeRates(data);
       });
   }, []);
 
