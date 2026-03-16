@@ -1,6 +1,6 @@
 //load React libaries
-import { useState, useEffect } from "react";
 import "./App.css";
+import { useState } from "react";
 
 //IMPORT UI LOGIC. SEPERATE FROM CONTROLLER.
 import BillInput from "./components/BillInput";
@@ -12,6 +12,9 @@ import CurrencySelector from "./components/CurrencySelector";
 import TotalValue from "./components/TotalValue";
 import OverallTotal from "./components/OverallTotal";
 
+//api calls
+import useExchangeRates from "./hooks/useExchangeRates";
+
 //all functions can access anything within app
 //everytime state changes, react re-runs app function
 export default function App() {
@@ -20,7 +23,7 @@ export default function App() {
   const [bill, setBill] = useState("");
   const [tipPercentage, setTipPercentage] = useState("");
   const [numberOfPeople, setNumberOfPeople] = useState("");
-  const [exchangeRates, setExchangeRates] = useState(null);
+  //const [exchangeRates, setExchangeRates] = useState(null);
   const [selectedCurrency, setSelectedCurrency] = useState("GBP");
 
   let totalLabel = "Total:";
@@ -63,15 +66,8 @@ export default function App() {
     setNumberOfPeople(event.target.value);
   }
 
-  //make an api call and then persistently store in state.
-  useEffect(() => {
-    fetch("https://api.frankfurter.dev/v1/latest?from=GBP")
-      .then((response) => response.json())
-      .then((data) => {
-        //console.log(data);
-        setExchangeRates(data);
-      });
-  }, []);
+  //exchange rates api call, return data and store in variable
+  const exchangeRates = useExchangeRates();
 
   //event handler for currency select box
 
