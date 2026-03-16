@@ -7,24 +7,8 @@ import TipInput from "./components/TipInput";
 import PeopleInput from "./components/PeopleInput";
 import TotalTipAmount from "./components/TotalTipAmount";
 import CurrencySelector from "./components/CurrencySelector";
-
-//create component (reusable snippet of code)
-//pass parameters from JSX into function and generate UI
-function TotalValue({ totalLabel, total }) {
-  return (
-    <>
-      <div>
-        {totalLabel} <span className="totalValue">{total}</span>
-      </div>
-    </>
-  );
-}
-
-//create component (reusable snippet of code)
-//pass parameters from JSX into function and generate UI
-function OverallTotal({ overallTotal }) {
-  return <>{overallTotal}</>;
-}
+import TotalValue from "./components/TotalValue";
+import OverallTotal from "./components/OverallTotal";
 
 //all functions can access anything within app
 //everytime state changes, react re-runs app function
