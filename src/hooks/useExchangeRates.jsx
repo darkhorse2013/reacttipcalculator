@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 //Use exchange rates api call
 export default function useExchangeRates() {
   //make an api call and then persistently store in state.
+  //can't access app() states since that is localised, so must be declared here.
+  //ui components can access app() state via props
   const [exchangeRates, setExchangeRates] = useState(null);
 
   useEffect(() => {
