@@ -229,38 +229,6 @@ export default function App() {
     );
   }
 
-  //all currency selector - old code , replaced with a component, leaving for comparison
-  //if JSON object hasn't arrived yet
-  //if (exchangeRates === null) {
-  //allCurrenciesSelector = (
-  // <div>
-  //  <b>Fetching exchange rates</b>
-  // </div>
-  //  );
-  //} else {
-  // let currencyCode = exchangeRates.rates;
-
-  //we have our list of currencies, now lets add them into a dropdown box
-
-  // allCurrenciesSelector = (
-  // <select
-  //  name="exchangeRates"
-  // id="currency"
-  // onChange={handleCurrencySelect}
-  // value={selectedCurrency}
-  //>
-  // {/* add base rate to list too */}
-  // <option value={exchangeRates.base}>{exchangeRates.base}</option>
-  // {/* add all other currencies to list too */}
-  // {Object.keys(currencyCode).map((currencyCode) => (
-  // <option key={currencyCode} value={currencyCode}>
-  //   {currencyCode}
-  // </option>
-  // ))}
-  // </select>
-  // );
-  // }
-
   return (
     <div className="container-properties">
       <div id="title">
