@@ -1,6 +1,8 @@
 //load React libaries
 import "./App.css";
 import { useState } from "react";
+//import utilities file
+import { calculateTipAmount, calculateFinalTotal } from "./utils/calculations";
 
 //IMPORT UI LOGIC. SEPERATE FROM CONTROLLER.
 import BillInput from "./components/BillInput";
@@ -40,6 +42,12 @@ export default function App() {
 
   //for conditional div
   let overallTotalDiv;
+
+  //calculate total, get current parsed numeric values from state for calculations
+  // never gets reassigned so const.
+  const billValue = parseFloat(bill);
+  const tipValue = parseFloat(tipPercentage);
+  const splitBetween = parseFloat(numberOfPeople);
 
   //create an event handler that fires when button is pressed
   //when user types in bill in UI, detect the event
@@ -115,11 +123,6 @@ export default function App() {
     setTipPercentage("");
   }
 
-  //calculate total
-  let billValue = parseFloat(bill);
-  let tipValue = parseFloat(tipPercentage);
-  let splitBetween = parseFloat(numberOfPeople);
-
   //ADD VALIDATION FOR NEGATIVE NUMBERS
   if (billValue < 0) {
     billError = "Bill cannot be negative";
@@ -191,28 +194,6 @@ export default function App() {
           (billValue * rate + tipAmount).toFixed(2) + " " + selectedCurrency;
       }
     }
-  }
-
-  //created function to calculate Tip Amount so that we can potentially unit test this.
-  //seperating business logic from UI
-  function calculateTipAmount(billValue, tipValue) {
-    let calculateTipAmount = billValue * (tipValue / 100);
-
-    return calculateTipAmount;
-  }
-
-  //created function to calculate Final Total so that we can potentially unit test this.
-  //seperating business logic from UI
-  function calculateFinalTotal(billValue, tipAmount, splitBetweenPeople) {
-    let calculateFinalTotal;
-
-    if (splitBetweenPeople > 0) {
-      calculateFinalTotal = (billValue + tipAmount) / splitBetweenPeople;
-    } else {
-      calculateFinalTotal = billValue + tipAmount;
-    }
-
-    return calculateFinalTotal;
   }
 
   // Runs during every render of the component.
