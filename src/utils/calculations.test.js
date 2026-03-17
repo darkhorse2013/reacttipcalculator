@@ -36,4 +36,9 @@ describe("calculateFinalTotal", () => {
   it("handles negative split as no split", () => {
     expect(calculateFinalTotal(100, 20, -1)).toBe(120);
   });
+
+  it("total is correct with decimals", () => {
+    expect(calculateFinalTotal(100,10, 3)).toBeCloseTo(36.666);
+  });
+
 });
