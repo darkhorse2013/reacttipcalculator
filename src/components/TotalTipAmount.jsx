@@ -1,4 +1,4 @@
-//Total Tip Amount Component only file
+//Total Tip Amount Component only file. SPLIT UI FROM APP FILE.
 //create component (reusable snippet of code)
 //pass parameters from JSX into function and generate UI
 

@@ -1,4 +1,4 @@
-//Currency Selecto Component only file
+//Currency Selecto Component only file. SPLIT UI FROM APP FILE.
 //create component - have to use PascalCase when naming components PascalCase , upper first and middle letter
 //pass parameters from JSX into function and generate UI
 export default function CurrencySelector({
